@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import ru.practicum.client.StatsClient;
+import ru.practicum.client.StatClient;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.utils.SimpleDateTimeFormatter;
 
@@ -20,12 +20,12 @@ public class GlobalInterceptor implements HandlerInterceptor {
 
     private String appName = "ewm-service";
 
-    private final StatsClient statsClient;
+    private final StatClient statClient;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         try {
-            ResponseEntity<Object> statsResponse = statsClient.save(EndpointHitDto.builder()
+            ResponseEntity<Object> statsResponse = statClient.save(EndpointHitDto.builder()
                     .app(appName)
                     .uri(request.getRequestURI())
                     .ip(request.getRemoteAddr())

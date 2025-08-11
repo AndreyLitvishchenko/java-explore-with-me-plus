@@ -18,9 +18,9 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class StatsClient extends BaseClient {
+public class StatClient extends BaseClient {
 
-    public StatsClient(@Value("${stats-service.url}") String serverUrl, RestTemplateBuilder builder) {
+    public StatClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
         super(builder.uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
                 .requestFactory(() -> new HttpComponentsClientHttpRequestFactory()).build());
     }

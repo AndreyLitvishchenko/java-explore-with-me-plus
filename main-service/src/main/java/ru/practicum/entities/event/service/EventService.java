@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import ru.practicum.centralRepository.CategoryRepository;
 import ru.practicum.centralRepository.UserRepository;
-import ru.practicum.client.StatsClient;
+import ru.practicum.client.StatClient;
 import ru.practicum.centralRepository.EventRepository;
 import ru.practicum.dto.StatsDto;
 import ru.practicum.entities.category.model.Category;
@@ -33,7 +33,7 @@ public class EventService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
-    private final StatsClient statsClient;
+    private final StatClient statClient;
 
     public List<EventDto> findByUserId(Long userId, Integer from, Integer size) {
         return eventRepository.findAllByInitiatorIdOrderByEventDateDesc(userId, from, size)
@@ -69,7 +69,7 @@ public class EventService {
 
         // Запрашиваем статистику для всех URI (одним запросом)
         LocalDateTime now = LocalDateTime.now();
-        List<StatsDto> stats = statsClient.getStats(
+        List<StatsDto> stats = statClient.getStats(
                 SimpleDateTimeFormatter.toString(LocalDateTime.of(1900, 1, 1, 0, 0)),
                 SimpleDateTimeFormatter.toString(now.plusMinutes(2)),
                 uris,
@@ -212,7 +212,7 @@ public class EventService {
     }
 
     private Long getViews(Long id) {
-        List<StatsDto> result = statsClient.getStats("1900-01-01 00:00:00",
+        List<StatsDto> result = statClient.getStats("1900-01-01 00:00:00",
                 SimpleDateTimeFormatter.toString(LocalDateTime.now().plusMinutes(2)),
                 List.of("/events/" + id),
                 true);
