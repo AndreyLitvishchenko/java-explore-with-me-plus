@@ -15,7 +15,6 @@ import ru.practicum.entities.event.model.enums.EventAdminStateAction;
 import ru.practicum.entities.event.model.enums.EventState;
 import ru.practicum.entities.event.model.enums.EventUserStateAction;
 import ru.practicum.entities.user.model.dto.UserDto;
-import ru.practicum.utils.DateTimeConstants;
 
 import java.time.LocalDateTime;
 
@@ -39,7 +38,7 @@ public class EventDto {
 
     @NotNull(message = "У события должна быть указана дата и время на которые намечено событие")
     @Future(message = "Нельзя создать событие на прошедшую дату")
-    @JsonFormat(pattern = DateTimeConstants.DATE_TIME_FORMAT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
     @NotNull(message = "Место проведения события должно быть указано")
@@ -71,6 +70,4 @@ public class EventDto {
     private EventAdminStateAction adminStateAction;
 
     private EventUserStateAction userStateAction;
-
-    private Long commentsCount;
 }
