@@ -10,7 +10,6 @@ import ru.practicum.entities.user.model.User;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM users u " +
             "WHERE (:ids IS NULL OR u.id IN :ids) " +

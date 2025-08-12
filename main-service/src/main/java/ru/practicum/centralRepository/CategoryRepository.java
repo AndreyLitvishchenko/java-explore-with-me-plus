@@ -9,7 +9,6 @@ import ru.practicum.entities.category.model.Category;
 
 import java.util.List;
 
-@Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Page<Category> findAll(Pageable pageable);
 

@@ -1,5 +1,7 @@
 package ru.practicum.entities.event.model.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.entities.category.model.Category;
 import ru.practicum.entities.category.model.mapper.CategoryMapper;
 import ru.practicum.entities.event.model.Event;
@@ -11,6 +13,7 @@ import ru.practicum.entities.user.model.mapper.UserMapper;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EventMapper {
     public static EventDto toEventDto(Event event) {
         return EventDto.builder()

@@ -13,7 +13,6 @@ import ru.practicum.entities.event.model.enums.EventState;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("SELECT e FROM events e " +
             "WHERE (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +

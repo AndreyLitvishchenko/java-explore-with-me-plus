@@ -1,10 +1,13 @@
 package ru.practicum.model;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.RequestCreateDto;
 import ru.practicum.RequestDto;
 
 import java.sql.Timestamp;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Mapper {
 
     public static EndpointHit toEndpointHit(RequestCreateDto requestCreateDto) {

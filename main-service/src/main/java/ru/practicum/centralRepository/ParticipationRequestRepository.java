@@ -6,7 +6,6 @@ import ru.practicum.entities.request.model.ParticipationRequest;
 
 import java.util.List;
 
-@Repository
 public interface ParticipationRequestRepository extends JpaRepository<ParticipationRequest, Long> {
     List<ParticipationRequest> findAllByRequesterId(Long userId);
 

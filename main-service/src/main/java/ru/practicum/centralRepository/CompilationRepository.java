@@ -8,7 +8,6 @@ import ru.practicum.entities.compilation.model.Compilation;
 
 import java.util.List;
 
-@Repository
 public interface CompilationRepository extends JpaRepository<Compilation, Long> {
     List<Compilation> findByTitleIgnoreCase(String title);
 
