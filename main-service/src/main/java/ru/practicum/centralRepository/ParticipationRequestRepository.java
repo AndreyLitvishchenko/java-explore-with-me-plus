@@ -1,7 +1,6 @@
 package ru.practicum.centralRepository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import ru.practicum.entities.request.model.ParticipationRequest;
 
 import java.util.List;

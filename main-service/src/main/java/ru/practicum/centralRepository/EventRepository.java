@@ -4,7 +4,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 import ru.practicum.entities.event.model.Event;
 import ru.practicum.entities.event.model.dto.AdminEventSearch;
 import ru.practicum.entities.event.model.dto.PublicEventSearch;

@@ -3,7 +3,6 @@ package ru.practicum.centralRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import ru.practicum.entities.category.model.Category;
 
