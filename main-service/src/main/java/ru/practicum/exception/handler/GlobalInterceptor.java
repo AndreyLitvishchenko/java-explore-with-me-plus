@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import ru.practicum.client.StatClient;
 import ru.practicum.dto.EndpointHitDto;
-import ru.practicum.utils.SimpleDateTimeFormatter;
+import ru.practicum.utils.DateTimeConstants;
 
 import java.time.LocalDateTime;
 
@@ -29,7 +29,7 @@ public class GlobalInterceptor implements HandlerInterceptor {
                     .app(appName)
                     .uri(request.getRequestURI())
                     .ip(request.getRemoteAddr())
-                    .timestamp(SimpleDateTimeFormatter.toString(LocalDateTime.now()))
+                    .timestamp(DateTimeConstants.toString(LocalDateTime.now()))
                     .build());
             if (!statsResponse.getStatusCode().is2xxSuccessful()) {
                 log.error("Ошибка при сохранении статистики: {}", statsResponse.getBody());
