@@ -20,7 +20,7 @@ import ru.practicum.exception.ConditionsNotMetException;
 import ru.practicum.exception.DateValidationException;
 import ru.practicum.exception.NotFoundException;
 import jakarta.transaction.Transactional;
-import ru.practicum.utils.SimpleDateTimeFormatter;
+import ru.practicum.utils.DateTimeConstants;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -70,8 +70,8 @@ public class EventService {
         // Запрашиваем статистику для всех URI (одним запросом)
         LocalDateTime now = LocalDateTime.now();
         List<StatsDto> stats = statClient.getStats(
-                SimpleDateTimeFormatter.toString(LocalDateTime.of(1900, 1, 1, 0, 0)),
-                SimpleDateTimeFormatter.toString(now.plusMinutes(2)),
+                DateTimeConstants.toString(LocalDateTime.of(1900, 1, 1, 0, 0)),
+                DateTimeConstants.toString(now.plusMinutes(2)),
                 uris,
                 true
         );
@@ -213,7 +213,7 @@ public class EventService {
 
     private Long getViews(Long id) {
         List<StatsDto> result = statClient.getStats("1900-01-01 00:00:00",
-                SimpleDateTimeFormatter.toString(LocalDateTime.now().plusMinutes(2)),
+                DateTimeConstants.toString(LocalDateTime.now().plusMinutes(2)),
                 List.of("/events/" + id),
                 true);
 
