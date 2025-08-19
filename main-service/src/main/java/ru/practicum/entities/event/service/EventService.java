@@ -1,12 +1,13 @@
 package ru.practicum.entities.event.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import ru.practicum.centralRepository.CategoryRepository;
+import ru.practicum.centralRepository.CommentRepository;
+import ru.practicum.centralRepository.EventRepository;
 import ru.practicum.centralRepository.UserRepository;
 import ru.practicum.client.StatClient;
-import ru.practicum.centralRepository.EventRepository;
 import ru.practicum.dto.StatsDto;
 import ru.practicum.entities.category.model.Category;
 import ru.practicum.entities.event.model.Event;
@@ -19,10 +20,10 @@ import ru.practicum.entities.user.model.User;
 import ru.practicum.exception.ConditionsNotMetException;
 import ru.practicum.exception.DateValidationException;
 import ru.practicum.exception.NotFoundException;
-import jakarta.transaction.Transactional;
 import ru.practicum.utils.DateTimeConstants;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,7 +34,8 @@ public class EventService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
-    private final StatClient statClient;
+    private final StatClient statsClient;
+    private final CommentRepository commentRepository;
 
     public List<EventDto> findByUserId(Long userId, Integer from, Integer size) {
         return eventRepository.findAllByInitiatorIdOrderByEventDateDesc(userId, from, size)
@@ -59,36 +61,50 @@ public class EventService {
             throw new DateValidationException("Дата начала не должна быть позже даты окончания");
         }
 
-        // Получаем список событий
         List<Event> events = eventRepository.findCommonEventsByFilters(search);
 
-        // Формируем список URI для запроса статистики
+        Map<Long, Long> commentsCountMap;
+        if (!events.isEmpty()) {
+            List<Long> eventIds = events.stream().map(Event::getId).toList();
+            // Вызываем новый метод репозитория
+            List<Object[]> results = commentRepository.countByEventIdsGrouped(eventIds);
+            // Преобразуем List<Object[]> в Map<Long, Long>
+            commentsCountMap = results.stream()
+                    .collect(Collectors.toMap(
+                            result -> (Long) result[0], // eventId
+                            result -> (Long) result[1]  // count
+                    ));
+        } else {
+            commentsCountMap = Collections.emptyMap(); // Пустая карта, если событий нет
+        }
+
         List<String> uris = events.stream()
                 .map(event -> "/events/" + event.getId())
                 .toList();
 
-        // Запрашиваем статистику для всех URI (одним запросом)
         LocalDateTime now = LocalDateTime.now();
-        List<StatsDto> stats = statClient.getStats(
+        List<StatsDto> stats = statsClient.getStats(
                 DateTimeConstants.toString(LocalDateTime.of(1900, 1, 1, 0, 0)),
                 DateTimeConstants.toString(now.plusMinutes(2)),
                 uris,
                 true
         );
 
-        // Создаем map для быстрого доступа к статистике
         Map<String, Long> statsMap = stats.stream()
                 .collect(Collectors.toMap(
                         StatsDto::getUri,
                         StatsDto::getHits
                 ));
 
-        // Добавляем статистику в список событий
         return events.stream()
                 .map(event -> {
                     EventDto dto = EventMapper.toEventDto(event);
+                    // Установка просмотров
                     Long views = statsMap.getOrDefault("/events/" + event.getId(), 0L);
                     dto.setViews(views);
+                    // Установка количества комментариев
+                    Long commentsCount = commentsCountMap.getOrDefault(event.getId(), 0L);
+                    dto.setCommentsCount(commentsCount);
                     return dto;
                 })
                 .toList();
@@ -212,7 +228,7 @@ public class EventService {
     }
 
     private Long getViews(Long id) {
-        List<StatsDto> result = statClient.getStats("1900-01-01 00:00:00",
+        List<StatsDto> result = statsClient.getStats("1900-01-01 00:00:00",
                 DateTimeConstants.toString(LocalDateTime.now().plusMinutes(2)),
                 List.of("/events/" + id),
                 true);

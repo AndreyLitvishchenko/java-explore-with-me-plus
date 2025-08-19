@@ -18,14 +18,14 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class GlobalInterceptor implements HandlerInterceptor {
 
-    private String appName = "ewm-service";
+    private final String appName = "ewm-service";
 
-    private final StatClient statClient;
+    private final StatClient statsClient;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         try {
-            ResponseEntity<Object> statsResponse = statClient.save(EndpointHitDto.builder()
+            ResponseEntity<Object> statsResponse = statsClient.save(EndpointHitDto.builder()
                     .app(appName)
                     .uri(request.getRequestURI())
                     .ip(request.getRemoteAddr())

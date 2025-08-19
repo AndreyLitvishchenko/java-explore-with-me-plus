@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.entities.event.model.Location;
 import ru.practicum.entities.event.model.enums.EventUserStateAction;
+import ru.practicum.utils.DateTimeConstants;
 
 import java.time.LocalDateTime;
 
@@ -31,7 +32,7 @@ public class UpdateEventDto implements UpdateEventBaseDto {
     private Long category;
 
     @Future(message = "Дата события должна быть в будущем")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = DateTimeConstants.DATE_TIME_FORMAT)
     private LocalDateTime eventDate;
 
     @Valid
