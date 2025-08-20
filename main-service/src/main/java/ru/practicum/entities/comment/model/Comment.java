@@ -30,21 +30,21 @@ import ru.practicum.utils.DateTimeConstants;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    User user;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", nullable = false)
-    Event event;
+    private Event event;
 
     @Size(min = 3, max = 2000)
     @Column(name = "message")
-    String message;
+    private String message;
 
     @Column(name = "created")
     @DateTimeFormat(pattern = DateTimeConstants.DATE_TIME_FORMAT)
-    LocalDateTime created;
+    private LocalDateTime created;
 }

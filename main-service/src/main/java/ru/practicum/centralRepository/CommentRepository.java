@@ -10,8 +10,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.practicum.entities.comment.model.Comment;
 
-
-@Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query("SELECT c FROM comments AS c " +
