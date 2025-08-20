@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import ru.practicum.client.StatClient;
 import ru.practicum.dto.EndpointHitDto;
-import ru.practicum.utils.SimpleDateTimeFormatter;
+import ru.practicum.utils.DateTimeConstants;
 
 import java.time.LocalDateTime;
 
@@ -18,18 +18,18 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class GlobalInterceptor implements HandlerInterceptor {
 
-    private String appName = "ewm-service";
+    private final String appName = "ewm-service";
 
-    private final StatClient statClient;
+    private final StatClient statsClient;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         try {
-            ResponseEntity<Object> statsResponse = statClient.save(EndpointHitDto.builder()
+            ResponseEntity<Object> statsResponse = statsClient.save(EndpointHitDto.builder()
                     .app(appName)
                     .uri(request.getRequestURI())
                     .ip(request.getRemoteAddr())
-                    .timestamp(SimpleDateTimeFormatter.toString(LocalDateTime.now()))
+                    .timestamp(DateTimeConstants.toString(LocalDateTime.now()))
                     .build());
             if (!statsResponse.getStatusCode().is2xxSuccessful()) {
                 log.error("Ошибка при сохранении статистики: {}", statsResponse.getBody());
